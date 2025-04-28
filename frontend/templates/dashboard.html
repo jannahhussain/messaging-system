@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+</head>
+<body>
+
+<div class="dashboard-container">
+
+    <!-- Sidebar for DMs and Groups -->
+    <div class="sidebar">
+        <h3>Chats</h3>
+        <ul id="chat-list">
+            {% for chat in chats %}
+                <li data-chat-id="{{ chat.id }}" class="chat-item">{{ chat.name }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Main Chat Area -->
+    <div class="chat-container">
+        <!-- Top Bar with Search, Notifications, Profile -->
+        <div class="top-bar">
+            <form id="search-form" method="GET" action="{{ url_for('dashboard.search_user') }}">
+                <input type="text" name="query" placeholder="Search users..." required>
+                <button type="submit">Search</button>
+            </form>
+
+            <div class="dropdown">
+                <button class="dropbtn">Notifications ({{ notifications|length }})</button>
+                <div class="dropdown-content">
+                    {% if notifications %}
+                        {% for notification in notifications %}
+                            <p>{{ notification.message }}</p>
+                        {% endfor %}
+                    {% else %}
+                        <p>No new notifications.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="dropbtn">Profile</button>
+                <div class="dropdown-content">
+                    <p><strong>Name:</strong> {{ user.full_name }}</p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong>Security Answer:</strong> {{ user.security_answer }}</p>
+                    <form method="POST" action="{{ url_for('user_auth_bp.logout') }}">
+                        <button type="submit">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Messages Panel -->
+        <div id="chat-messages" class="chat-messages">
+            {% for message in messages %}
+                <div class="message" data-message-id="{{ message.id }}">
+                    <span class="sender">{{ message.sender.username }}</span>:
+                    <span class="content">{{ message.content }}</span>
+                    <span class="timestamp">{{ message.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</span>
+                    <span class="flag-message" onclick="flagMessage('{{ message.id }}')">🚩</span>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Message Sending Form -->
+        <form id="send-message-form" method="POST" action="{{ url_for('dashboard.send_message') }}">
+            <input type="text" name="content" placeholder="Type your message..." required>
+            <input type="hidden" name="chat_id" id="current-chat-id" value="">
+            <button type="submit">Send</button>
+        </form>
+    </div>
+
+</div>
+
+<script>
+    // Infinite scroll loading messages
+    let chatMessages = document.getElementById('chat-messages');
+    chatMessages.addEventListener('scroll', function () {
+        if (chatMessages.scrollTop === 0) {
+            loadMoreMessages();
+        }
+    });
+
+    function loadMoreMessages() {
+        // Dummy function: you will link this to backend pagination
+        console.log('Loading more messages...');
+    }
+
+    function flagMessage(messageId) {
+        fetch('/flag_message', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message_id: messageId, reason: 'Inappropriate Content' })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message || data.error);
+        })
+        .catch(error => {
+            alert('Error flagging message.');
+        });
+    }
+</script>
+
+</body>
+</html>

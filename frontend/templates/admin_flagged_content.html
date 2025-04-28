@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flagged Content Review</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+</head>
+<body>
+    <header class="admin-header">
+        <h1>Flagged Content</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('admin_bp.admin_dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('analytics_bp.analytics_dashboard') }}">Analytics</a></li>
+                <li><a href="{{ url_for('user_auth_bp.logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="admin-main">
+        <section class="flagged-messages">
+            <h2>Messages Flagged for Review</h2>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul class="flashes">
+                        {% for category, message in messages %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+
+            {% if flagged_messages %}
+                <table class="flagged-table">
+                    <thead>
+                        <tr>
+                            <th>Flag ID</th>
+                            <th>Message ID</th>
+                            <th>Reason</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for flag in flagged_messages %}
+                        <tr>
+                            <td>{{ flag.id }}</td>
+                            <td>{{ flag.message_id }}</td>
+                            <td>{{ flag.reason }}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('admin_bp.flag_action', flag_id=flag.id) }}" class="action-form">
+                                    <select name="action" required>
+                                        <option value="">Select Action</option>
+                                        <option value="ignore">Ignore</option>
+                                        <option value="delete">Delete</option>
+                                    </select>
+                                    <button type="submit">Submit</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No flagged messages to review.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer class="admin-footer">
+        <p>&copy; 2025 Admin Panel</p>
+    </footer>
+</body>
+</html>

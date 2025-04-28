@@ -1,0 +1,261 @@
+/* Base Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f6f8;
+    color: #333;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    padding-top: 30px;
+}
+
+/* Forms */
+form {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="submit"],
+select {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 16px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+input[type="submit"], button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover, button:hover {
+    background-color: #0056b3;
+}
+
+/* Error & Success Messages */
+.flash-success {
+    color: green;
+    padding: 10px;
+    margin-bottom: 15px;
+    background: #e0ffe0;
+    border: 1px solid #a0d6a0;
+    border-radius: 6px;
+}
+
+.flash-error {
+    color: red;
+    padding: 10px;
+    margin-bottom: 15px;
+    background: #ffe0e0;
+    border: 1px solid #d6a0a0;
+    border-radius: 6px;
+}
+
+/* Dashboard Layout */
+.dashboard {
+    display: flex;
+    min-height: 90vh;
+}
+
+.sidebar {
+    width: 250px;
+    background: #2c3e50;
+    padding: 20px;
+    color: #ecf0f1;
+}
+
+.sidebar h2 {
+    color: #ecf0f1;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+.sidebar ul li:hover {
+    background: #34495e;
+}
+
+.main-content {
+    flex: 1;
+    padding: 30px;
+}
+
+/* Chat Area */
+.chat-window {
+    background: #ffffff;
+    border-radius: 8px;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: scroll;
+    padding: 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.chat-message {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.chat-message:hover .flag-button {
+    display: inline-block;
+}
+
+/* Flag Message Button */
+.flag-button {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: none;
+    border: none;
+    color: #e74c3c;
+    cursor: pointer;
+}
+
+/* Chat Input */
+.chat-input {
+    display: flex;
+}
+
+.chat-input textarea {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-top: 1px solid #ccc;
+    resize: none;
+}
+
+.chat-input button {
+    padding: 0 20px;
+    background: #007bff;
+    border: none;
+    color: white;
+}
+
+/* Search and Notifications Bar */
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #007bff;
+    padding: 10px 20px;
+    color: white;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.topbar input[type="text"] {
+    width: 300px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+}
+
+.notification-dropdown, .profile-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #ffffff;
+    min-width: 250px;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 6px;
+}
+
+.dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+/* Show dropdown on hover */
+.notification-dropdown:hover .dropdown-content,
+.profile-dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Profile Page */
+.profile-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Admin Special Styles */
+.admin-username {
+    color: red;
+    font-weight: bold;
+}
+
+.admin-section {
+    background: #ffe6e6;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* Analytics Chart Area */
+.analytics-section {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+canvas {
+    background: #ffffff;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 768px) {
+    .dashboard {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .topbar input[type="text"] {
+        width: 100%;
+        margin-top: 10px;
+    }
+}

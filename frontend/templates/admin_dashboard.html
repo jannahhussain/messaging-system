@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+</head>
+<body>
+    <header class="admin-header">
+        <h1>Admin Dashboard</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('admin_bp.flagged_content') }}">Flagged Content</a></li>
+                <li><a href="{{ url_for('analytics_bp.analytics_dashboard') }}">Analytics</a></li>
+                <li><a href="{{ url_for('user_auth_bp.logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="admin-main">
+        <section class="admin-stats">
+            <h2>Platform Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Users</h3>
+                    <p>{{ stats.total_users }}</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Active Users (30 days)</h3>
+                    <p>{{ stats.active_users }}</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Flagged Messages</h3>
+                    <p>{{ stats.flagged_messages }}</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Banned Users</h3>
+                    <p>{{ stats.banned_users }}</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="admin-recent-activity">
+            <h2>Recent Flags</h2>
+            <ul class="recent-list">
+                {% for flag in stats.recent_flags %}
+                <li>
+                    Message ID: {{ flag.message_id }} - Reason: {{ flag.reason }}
+                    <a href="{{ url_for('admin_bp.flagged_content') }}">Review</a>
+                </li>
+                {% else %}
+                <li>No recent flags.</li>
+                {% endfor %}
+            </ul>
+
+            <h2>New Users</h2>
+            <ul class="recent-list">
+                {% for user in stats.recent_users %}
+                <li>{{ user.first_name }} {{ user.last_name }} - Registered: {{ user.created_at.strftime('%Y-%m-%d') }}</li>
+                {% else %}
+                <li>No new users.</li>
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+
+    <footer class="admin-footer">
+        <p>&copy; 2025 Admin Panel</p>
+    </footer>
+</body>
+</html>

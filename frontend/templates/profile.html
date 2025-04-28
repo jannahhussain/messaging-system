@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+<div class="profile-container">
+
+    <!-- Top Bar Navigation -->
+    <div class="top-bar">
+        <a href="{{ url_for('dashboard') }}">Home</a>
+        <a href="{{ url_for('user_auth_bp.logout') }}">Logout</a>
+    </div>
+
+    <div class="profile-card">
+        <h2>Profile</h2>
+
+        <div class="profile-info">
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>Full Name:</strong> {{ user.full_name }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Security Answer:</strong> {{ user.security_answer }}</p>
+            <p><strong>Role:</strong> 
+                {% if user.role == 'admin' %}
+                    <span class="admin-role">Admin</span>
+                {% else %}
+                    <span class="user-role">User</span>
+                {% endif %}
+            </p>
+            <p><strong>Status:</strong>
+                {% if user.is_banned %}
+                    <span class="banned-status">Banned</span>
+                {% elif user.suspended_until and user.suspended_until > now %}
+                    <span class="suspended-status">Suspended until {{ user.suspended_until.strftime('%Y-%m-%d') }}</span>
+                {% else %}
+                    <span class="active-status">Active</span>
+                {% endif %}
+            </p>
+        </div>
+
+        {% if current_user.is_authenticated and current_user.role == 'admin' and user.id != current_user.id %}
+            <div class="admin-actions">
+                <form method="POST" action="{{ url_for('admin_bp.ban_user', user_id=user.id) }}">
+                    <button type="submit" class="ban-btn">Ban User</button>
+                </form>
+                <form method="POST" action="{{ url_for('admin_bp.suspend_user', user_id=user.id) }}">
+                    <button type="submit" class="suspend-btn">Suspend User</button>
+                </form>
+            </div>
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+</html>
