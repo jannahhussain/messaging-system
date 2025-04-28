@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from models import User
 from app import db
-from notifications import create_notification
+from app import chat_bp
 
 # Blueprint setup
 user_auth_bp = Blueprint('user_auth_bp', __name__)
@@ -132,7 +132,7 @@ def reset_password():
             flash(f'Error resetting password: {str(e)}', 'error')
             return redirect(url_for('user_auth_bp.reset_password'))
 
-    return render_template('reset_password.html')
+    return render_template('forgot_password.html')
 
 # ---------------------------
 # Profile Route (for user's own profile)
@@ -141,4 +141,10 @@ def reset_password():
 @login_required
 def profile():
     return render_template('profile.html', user=current_user)
+
+@chat_bp.route('/dashboard')
+@login_required
+def dashboard():
+    return render_template('dashboard.html')
+
 

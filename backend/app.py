@@ -16,6 +16,14 @@ from flask import session
 from user_management_authentication import user_auth_bp
 from analytics import analytics_bp
 from flask_login import login_required, current_user
+from user_management_authentication import user_auth_bp
+from chat import chat_bp
+from user_management_authentication import user_bp
+from admin_management import admin_bp
+from notifications import notifications_bp
+from analytics import analytics_bp
+
+
 
 app = Flask(__name__)
 
@@ -33,13 +41,13 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def create_app():
-    """Factory method to create and configure the Flask app"""
     app = Flask(__name__)
 
     # Basic Config
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default_secret_key')
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///database.db')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config.from_object('config.Config')
 
     # Session Config
     app.config['SESSION_TYPE'] = 'filesystem'
@@ -50,17 +58,14 @@ def create_app():
     migrate.init_app(app, db)
     session.init_app(app)
 
-    # Import blueprints
-    from user_management_authentication import user_bp
-    from admin_management import admin_bp
-    from notifications import notifications_bp
-    from analytics import analytics_bp
 
     # Register blueprints
     app.register_blueprint(user_bp, url_prefix='/user')
     app.register_blueprint(admin_bp, url_prefix='/admin')
     app.register_blueprint(notifications_bp, url_prefix='/notifications')
     app.register_blueprint(analytics_bp, url_prefix='/analytics')
+    app.register_blueprint(user_auth_bp, url_prefix='/auth')
+    app.register_blueprint(chat_bp, url_prefix='/chat')
 
     # Register error handlers and CLI commands
     register_error_handlers(app)
