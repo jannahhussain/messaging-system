@@ -1,6 +1,4 @@
-# user_management_authentication.py
-
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
@@ -11,9 +9,8 @@ from app import chat_bp
 # Blueprint setup
 user_auth_bp = Blueprint('user_auth_bp', __name__)
 
-# ---------------------------
+
 # Registration Route
-# ---------------------------
 @user_auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -55,9 +52,8 @@ def register():
 
     return render_template('register.html')
 
-# ---------------------------
+
 # Login Route
-# ---------------------------
 @user_auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -82,7 +78,7 @@ def login():
             user.last_login = datetime.utcnow()
             db.session.commit()
             flash('Logged in successfully.', 'success')
-            return redirect(url_for('dashboard'))  # Make sure 'dashboard' is a valid route
+            return redirect(url_for('dashboard')) 
 
         # If invalid credentials, show an error
         flash('Invalid username or password.', 'error')
@@ -91,9 +87,7 @@ def login():
     return render_template('login.html')
 
 
-# ---------------------------
 # Logout Route
-# ---------------------------
 @user_auth_bp.route('/logout')
 @login_required
 def logout():
@@ -101,9 +95,8 @@ def logout():
     flash('You have been logged out.', 'success')
     return redirect(url_for('user_auth_bp.login'))
 
-# ---------------------------
+
 # Reset Password (Security Question)
-# ---------------------------
 @user_auth_bp.route('/reset-password', methods=['GET', 'POST'])
 def reset_password():
     if request.method == 'POST':
@@ -134,9 +127,8 @@ def reset_password():
 
     return render_template('forgot_password.html')
 
-# ---------------------------
+
 # Profile Route (for user's own profile)
-# ---------------------------
 @user_auth_bp.route('/profile')
 @login_required
 def profile():

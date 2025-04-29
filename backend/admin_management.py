@@ -1,4 +1,3 @@
-# admin_management.py
 from datetime import datetime, timedelta
 from flask import Blueprint, flash, jsonify, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required

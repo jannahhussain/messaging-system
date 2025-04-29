@@ -214,7 +214,7 @@ def ban_user(user_id):
 
         # Create notification for the admin
         create_notification(
-            user_id=1,  # assuming admin has ID 1
+            user_id=1,  # dummy admin user ID
             notification_type='admin_alert',
             message=f'User {user.username} has been banned.'
         )

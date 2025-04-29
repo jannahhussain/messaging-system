@@ -1,13 +1,10 @@
-
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
-# -------------------------------
 # User Model
-# -------------------------------
 class User(db.Model):
     __tablename__ = 'users'
 
@@ -44,9 +41,8 @@ class User(db.Model):
     def check_security_answer(self, answer):
         return check_password_hash(self.security_answer_hash, answer)
 
-# -------------------------------
+
 # Message Model
-# -------------------------------
 class Message(db.Model):
     __tablename__ = 'messages'
 
@@ -57,10 +53,7 @@ class Message(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     deleted = db.Column(db.Boolean, default=False)
 
-# -------------------------------
 # Flagged Content Model
-# -------------------------------
-
 class FlaggedContent(db.Model):
     __tablename__ = 'flagged_content'
     id = db.Column(db.Integer, primary_key=True)
@@ -80,9 +73,7 @@ class FlaggedContent(db.Model):
         return f"<FlaggedContent {self.id} - Message {self.message_id} - User {self.user_id}>"
 
 
-# -------------------------------
 # Activity Log Model
-# -------------------------------
 class ActivityLog(db.Model):
     __tablename__ = 'activity_logs'
 
@@ -92,9 +83,8 @@ class ActivityLog(db.Model):
     details = db.Column(db.Text, nullable=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
-# -------------------------------
+
 # Notification Model
-# -------------------------------
 class Notification(db.Model):
     __tablename__ = 'notifications'
 
@@ -105,9 +95,7 @@ class Notification(db.Model):
     is_read = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-# -------------------------------
 # Initialize Database
-# -------------------------------
 def init_db(app):
     """Initialize the database with the Flask app context."""
     db.init_app(app)

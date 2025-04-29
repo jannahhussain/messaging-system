@@ -3,7 +3,7 @@ from app import db
 from models import Notification
 from datetime import datetime
 import logging
-from flask import jsonify, request
+from flask import jsonify
 from models import Message, FlaggedContent
 from flask import Flask
 app = Flask(__name__)
@@ -21,7 +21,7 @@ def create_notification(user_id, message, notif_type, is_read=False):
     - is_read: Whether the notification has been read by the user.
     """
     try:
-        # Create the notification object
+        # Creating the notification object
         notification = Notification(
             user_id=user_id,
             message=message,
@@ -221,7 +221,7 @@ def delete_message(message_id):
 
         # Notify admin about the deletion
         create_notification(
-            user_id=1,  # Assuming admin ID is 1
+            user_id=1,  # dummy admin user ID
             notification_type='admin_alert',
             message=f'Message {message_id} has been deleted.'
         )

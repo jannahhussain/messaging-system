@@ -29,7 +29,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Load more chat messages (stub to replace with actual backend call later)
 function loadMoreMessages() {
-    // TODO: Replace with real AJAX request later
     console.log('Loading more messages...');
     // You would fetch('/load_messages') here and prepend messages
 }

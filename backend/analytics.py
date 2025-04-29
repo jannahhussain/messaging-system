@@ -1,5 +1,3 @@
-# analytics.py
-
 from datetime import datetime, timedelta
 from collections import Counter
 from flask import Blueprint, jsonify, request

@@ -1,11 +1,3 @@
-
-# This file handles all database-related functionality, such as:
-# - Opening and closing database connections
-# - Executing SQL queries
-# - Handling migrations if needed
-# - Helper functions to manage interactions with the database
-# - Specialized queries for future features like notifications, activity logs, flagged content, etc.
-
 from flask import current_app
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -81,7 +73,7 @@ def run_migrations():
     except Exception as e:
         logger.error(f"Error during migrations: {str(e)}")
 
-# Function to initialize the database (for testing or first-time setup)
+# Function to initialize the database (for testing)
 def init_db():
     """
     Initializes the database by creating tables based on the models.
