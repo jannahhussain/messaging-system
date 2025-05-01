@@ -53,6 +53,24 @@ class Message(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     deleted = db.Column(db.Boolean, default=False)
 
+#Group Model
+class Group(db.Model):
+    __tablename__ = 'groups'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=True, nullable=False)
+    created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    members = db.relationship('User', secondary='group_membership', backref='groups')
+
+class GroupMembership(db.Model):
+    __tablename__ = 'group_membership'
+    id = db.Column(db.Integer, primary_key=True)
+    group_id = db.Column(db.Integer, db.ForeignKey('groups.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+
+
 # Flagged Content Model
 class FlaggedContent(db.Model):
     __tablename__ = 'flagged_content'
@@ -101,3 +119,4 @@ def init_db(app):
     db.init_app(app)
     with app.app_context():
         db.create_all()
+

@@ -259,3 +259,10 @@ canvas {
         margin-top: 10px;
     }
 }
+
+.flash-success {
+    color: green;
+}
+.flash-error {
+    color: red;
+}

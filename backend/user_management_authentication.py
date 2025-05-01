@@ -2,13 +2,14 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
-from models import User
+from models import User, db, Group, GroupMembership
 from app import db
 from app import chat_bp
+from models import Group, GroupMembership
 
 # Blueprint setup
 user_auth_bp = Blueprint('user_auth_bp', __name__)
-
+group_bp = Blueprint('group_bp', __name__)
 
 # Registration Route
 @user_auth_bp.route('/register', methods=['GET', 'POST'])
@@ -87,13 +88,13 @@ def login():
     return render_template('login.html')
 
 
-# Logout Route
-@user_auth_bp.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    flash('You have been logged out.', 'success')
-    return redirect(url_for('user_auth_bp.login'))
+# Logout Route (old)
+#@user_auth_bp.route('/logout')
+#@login_required
+#def logout():
+#    logout_user()
+#    flash('You have been logged out.', 'success')
+#    return redirect(url_for('user_auth_bp.login'))
 
 
 # Reset Password (Security Question)
@@ -139,4 +140,63 @@ def profile():
 def dashboard():
     return render_template('dashboard.html')
 
+@user_auth_bp.route('/create_group', methods=['POST'])
+@login_required
+def create_group():
+    group_name = request.form.get('group_name')
 
+    if not group_name:
+        flash("Group name is required.", "error")
+        return redirect(url_for('chat'))
+
+    existing = Group.query.filter_by(name=group_name).first()
+    if existing:
+        flash("Group already exists.", "error")
+        return redirect(url_for('chat'))
+
+    group = Group(name=group_name, created_by=current_user.id)
+    db.session.add(group)
+    db.session.commit()
+
+    membership = GroupMembership(group_id=group.id, user_id=current_user.id)
+    db.session.add(membership)
+    db.session.commit()
+
+    flash("Group created successfully!", "success")
+    return redirect(url_for('chat'))
+
+@group_bp.route('/leave_group/<int:group_id>', methods=['POST'])
+@login_required
+def leave_group(group_id):
+    membership = GroupMembership.query.filter_by(group_id=group_id, user_id=current_user.id).first()
+
+    if not membership:
+        flash("You're not a member of this group.", "error")
+        return redirect(url_for('chat'))
+
+    db.session.delete(membership)
+    db.session.commit()
+
+    flash("You have left the group.", "success")
+    return redirect(url_for('chat'))
+
+@group_bp.route('/kick_member/<int:group_id>/<int:user_id>', methods=['POST'])
+@login_required
+def kick_member(group_id, user_id):
+    group = Group.query.get_or_404(group_id)
+
+    if current_user.role != 'admin':
+        flash("Only admins can remove members.", "error")
+        return redirect(url_for('chat'))
+
+    membership = GroupMembership.query.filter_by(group_id=group_id, user_id=user_id).first()
+
+    if not membership:
+        flash("User not in group.", "error")
+        return redirect(url_for('chat'))
+
+    db.session.delete(membership)
+    db.session.commit()
+
+    flash("User removed from group.", "success")
+    return redirect(url_for('chat'))

@@ -22,7 +22,7 @@ from user_management_authentication import user_bp
 from admin_management import admin_bp
 from notifications import notifications_bp
 from analytics import analytics_bp
-
+from group_management import group_bp
 
 
 app = Flask(__name__)
@@ -35,6 +35,7 @@ session = Session()
 
 app.register_blueprint(user_auth_bp)
 app.register_blueprint(analytics_bp)
+app.register_blueprint(group_bp)
 
 # Logger setup
 logging.basicConfig(level=logging.INFO)
@@ -42,6 +43,7 @@ logger = logging.getLogger(__name__)
 
 def create_app():
     app = Flask(__name__)
+    db.create_all()
 
     # Basic Config
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default_secret_key')
