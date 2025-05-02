@@ -118,6 +118,12 @@
 </body>
 </html>
 
+<form action="{{ url_for('group_bp.create_group') }}" method="POST" class="group-create-form">
+    <input type="text" name="group_name" placeholder="New Group Name" required>
+    <button type="submit">Create Group</button>
+  </form>
+  
+
 <div id="create-group">
     <form action="{{ url_for('user_auth_bp.create_group') }}" method="POST">
         <input type="text" name="group_name" placeholder="New group name" required>
@@ -125,4 +131,22 @@
     </form>
 </div>
 
+<form action="{{ url_for('group_bp.leave_group', group_id=current_group.id) }}" method="POST" style="display:inline;">
+    <button type="submit" class="leave-btn">Leave Group</button>
+  </form>
+
+  {% if current_user.role == 'admin' %}
+  <ul class="group-members">
+    {% for member in group_members %}
+      <li>
+        {{ member.full_name }}
+        {% if member.id != current_user.id %}
+        <form action="{{ url_for('group_bp.kick_member', group_id=current_group.id, user_id=member.id) }}" method="POST" style="display:inline;">
+          <button type="submit" class="kick-btn">Kick</button>
+        </form>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
 
