@@ -27,10 +27,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Load more chat messages (stub to replace with actual backend call later)
 function loadMoreMessages() {
-    console.log('Loading more messages...');
-    // You would fetch('/load_messages') here and prepend messages
+    console.log('Loading more messages...');s
 }
 
 // Handle flagging messages
@@ -160,3 +158,53 @@ function deleteFlaggedMessage(messageId) {
         });
     }
 }
+
+// Fetch real analytics data from backend
+fetch('/api/analytics')
+  .then(response => response.json())
+  .then(data => {
+    // Update stat counters
+    document.getElementById("userCount").textContent = data.total_users;
+    document.getElementById("messageCount").textContent = data.total_messages;
+    document.getElementById("flaggedCount").textContent = data.total_flagged;
+
+    // Draw Messages Per Day Chart
+    const messagesChartCtx = document.getElementById("messagesChart").getContext("2d");
+    new Chart(messagesChartCtx, {
+      type: 'bar',
+      data: {
+        labels: data.messages_per_day.labels, // e.g., ["Mon", "Tue", ...]
+        datasets: [{
+          label: 'Messages',
+          data: data.messages_per_day.counts,
+          backgroundColor: '#4f46e5'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+
+    // Draw Flag Breakdown Pie Chart
+    const flagsChartCtx = document.getElementById("flagsChart").getContext("2d");
+    new Chart(flagsChartCtx, {
+      type: 'pie',
+      data: {
+        labels: Object.keys(data.flag_breakdown),
+        datasets: [{
+          data: Object.values(data.flag_breakdown),
+          backgroundColor: ['#ef4444', '#f59e0b', '#10b981']
+        }]
+      },
+      options: {
+        responsive: true
+      }
+    });
+
+  })
+  .catch(error => {
+    console.error('Failed to fetch analytics data:', error);
+  });

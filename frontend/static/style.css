@@ -260,9 +260,23 @@ canvas {
     }
 }
 
-.flash-success {
-    color: green;
-}
-.flash-error {
-    color: red;
-}
+.charts {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .chart-box {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 20px;
+    flex: 1;
+    min-width: 300px;
+  }
+  
+  canvas {
+    width: 100% !important;
+    height: auto !important;
+  }
+  

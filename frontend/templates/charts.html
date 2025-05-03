@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Analytics Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="dashboard">
+    <header>
+      <div class="title">Admin Dashboard</div>
+      <div class="profile">Admin</div>
+    </header>
+
+    <section class="stats">
+      <div class="card">
+        <h3>Total Users</h3>
+        <p id="userCount">Loading...</p>
+      </div>
+      <div class="card">
+        <h3>Messages Sent</h3>
+        <p id="messageCount">Loading...</p>
+      </div>
+      <div class="card">
+        <h3>Flagged Messages</h3>
+        <p id="flaggedCount">Loading...</p>
+      </div>
+    </section>
+
+    <section class="charts">
+      <div class="chart-box">
+        <h4>Messages Per Day</h4>
+        <canvas id="messagesChart"></canvas>
+      </div>
+      <div class="chart-box">
+        <h4>Flag Breakdown</h4>
+        <canvas id="flagsChart"></canvas>
+      </div>
+    </section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
